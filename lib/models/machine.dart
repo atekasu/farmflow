@@ -66,7 +66,7 @@ class Machine {
       if (a.inspectionDate == null && b.inspectionDate == null) return 0;
       if (a.inspectionDate == null) return 1;
       if (b.inspectionDate == null) return -1;
-      return (a.inspectionDate!.compareTo(a.inspectionDate!));
+      return (b.inspectionDate!.compareTo(a.inspectionDate!));
     });
     return results.first;
   }
