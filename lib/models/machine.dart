@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+
 import 'types/machine_type.dart';
 import 'package:farmflow/models/machine_status.dart';
 import 'maintenace/inspection_result.dart';
@@ -20,19 +21,33 @@ class Machine {
     this.inspectionHistory = const [],
   }) : this.uuid = uuid ?? Uuid().v4();
 
-  // 現在のメンテナンス状態を計算するメソッド
-  MaintenanceStatus calculateMaintenanceStatus() {
-    final hoursSinceOilChange = status.totalHours - status.hoursAtLastOilChange;
-    if (hoursSinceOilChange >= type.recommendedOilchangeinterval) {
-      return MaintenanceStatus.critical;
-    } else if (hoursSinceOilChange >= type.recommendedOilchangeinterval * 0.8) {
-      return MaintenanceStatus.warning;
-    } else {
+  MaintenanceStatus calculateMaintenaceStatus() {
+    if (type.recommendedOilchangeinterval <= 0) {
+      //アタッチメントのメンテナス状態は点検結果に基づく
+      final allItems = type.inspectionItems.map((item) => item.name).toList();
+      final uncheckedItems =
+          allItems.where((name) => !isItemChecked(name)).toList();
+
+      if (uncheckedItems.isNotEmpty) {
+        return MaintenanceStatus.warning;
+      }
+
       return MaintenanceStatus.good;
+    } else {
+      final hoursSinceOilChange =
+          status.totalHours - status.hoursAtLastOilChange;
+
+      if (hoursSinceOilChange >= type.recommendedOilchangeinterval) {
+        return MaintenanceStatus.critical;
+      } else if (hoursSinceOilChange >=
+          type.recommendedOilchangeinterval * 0.8) {
+        return MaintenanceStatus.warning;
+      } else {
+        return MaintenanceStatus.good;
+      }
     }
   }
 
-  //特定の点検項目の状態を取得
   bool isItemChecked(String itemName) {
     return status.checkedItems[itemName] ?? false;
   }
@@ -47,12 +62,39 @@ class Machine {
     if (results.isEmpty) return null;
 
     results.sort((a, b) {
-      // inspectionDateが新しい順にソート
+      //inspectionDateが新しい順にソート
       if (a.inspectionDate == null && b.inspectionDate == null) return 0;
       if (a.inspectionDate == null) return 1;
       if (b.inspectionDate == null) return -1;
-      return b.inspectionDate!.compareTo(a.inspectionDate!);
+      return (a.inspectionDate!.compareTo(a.inspectionDate!));
     });
     return results.first;
+  }
+
+  //ステータスを更新した新しいmachineインスタンスを生成
+  Machine copyWithStatus(MachineStatus newStatus) {
+    return Machine(
+      id: id,
+      uuid: uuid,
+      modelName: modelName,
+      type: type,
+      status: newStatus,
+      inspectionHistory: inspectionHistory,
+    );
+  }
+
+  //点検結果を追加したあたらしいMachineインスタンスを生成
+  Machine addInspectionResult(InspectionResult result) {
+    final newHistory = List<InspectionResult>.from(inspectionHistory)
+      ..add(result);
+
+    return Machine(
+      id: id,
+      uuid: uuid,
+      modelName: modelName,
+      type: type,
+      status: status,
+      inspectionHistory: newHistory,
+    );
   }
 }

@@ -4,5 +4,4 @@ abstract class MachineType {
   String get name;
   List<InspectionItem> get inspectionItems;
   int get recommendedOilchangeinterval;
-          
 }
