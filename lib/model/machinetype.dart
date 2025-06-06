@@ -1,4 +1,5 @@
 import 'package:farmflow/utils/uuid_generator.dart';
+
 enum MachineType {
   tractor('トラクター', MaintenanceLevel.detailed),
   combine('コンバイン', MaintenanceLevel.simple),
@@ -17,7 +18,6 @@ enum MaintenanceLevel {
   simple, //簡易的な記録（JAにメンテナンス委託、作業記録中心）
   minimal, //最小限の記録(アタッチメント等)
 }
-
 
 class Machine {
   const Machine({
@@ -47,12 +47,13 @@ class Machine {
       updatedAt: now,
     );
   }
+
   ///JSON読込用ファクトリーコンストラクタ
   factory Machine.fromJson(Map<String, dynamic> json) {
     return Machine(
-      uuid: json['uuid'] ,
-      statusUuid: json['statusUuid'] ,
-      modelname: json['modelname'] ,
+      uuid: json['uuid'],
+      statusUuid: json['statusUuid'],
+      modelname: json['modelname'],
       machineType: MachineType.values.firstWhere(
         (type) => type.name == json['machineTyep'],
         orElse: () => MachineType.tractor,
@@ -76,9 +77,10 @@ class Machine {
   ///詳細なメンテナンス管理が必要か（トラクター、管理機など）
   bool get needsDetailedMaintenance =>
       maintenanceLebel == MaintenanceLevel.simple;
+
   ///簡易的なメンテナンス管理が必要か（コンバイン、田植え機など）
   bool get isSimpleMaintenance => maintenanceLebel == MaintenanceLevel.simple;
-  
+
   Machine copyWith({
     String? statusUuid,
     String? modelname,
@@ -89,7 +91,7 @@ class Machine {
       uuid: uuid,
       statusUuid: statusUuid ?? this.statusUuid,
       modelname: modelname ?? this.modelname,
-      machineType: machineType ?? this.machineType,
+      machineType: this.machineType,
       runnningHours: runnningHours ?? this.runnningHours,
       createdAt: createdAt,
       updatedAt: updatedAt ?? DateTime.now(),
@@ -107,5 +109,4 @@ class Machine {
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
-  
 }

@@ -1,5 +1,4 @@
 import 'package:farmflow/utils/uuid_generator.dart';
-import 'package:farmflow/model/machine.dart';
 import 'package:farmflow/model/machinetype.dart';
 import 'package:farmflow/utils/constants.dart';
 
@@ -10,37 +9,37 @@ enum MaintenanceType {
     AppConstants.engineOilRecommended,
     AppConstants.engineOilRequired,
     // constコンテキストでSetリテラルを使用
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
   oilFilter(
     'オイルフィルター交換',
-    AppConstants.oilFilterRecommended,
+    AppConstants.oilFilterInterval,
     AppConstants.oilFilterRequired,
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
   airFilter(
     'エアフィルター交換',
-    AppConstants.aireFilterRecommended,
-    AppConstants.aireFilterRequired,
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    AppConstants.airFilterInterval,
+    AppConstants.airFilterRequired,
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
   missionOil(
     'ミッションオイル交換',
-    AppConstants.missionOilRecommended,
+    AppConstants.missionOilInterval,
     AppConstants.missionOilRequired,
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
   fuelFilter(
     '燃料フィルター交換',
-    AppConstants.fuelFilterRecommended,
+    AppConstants.fuelFilterInterval,
     AppConstants.fuelFilterRequired,
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
   grease(
     'グリスアップ',
-    AppConstants.greaceRecommended,
-    AppConstants.greaceRequired,
-    <MachineType>{MachineType.tractor, MachineType.cultivator},
+    AppConstants.greaseInterval,
+    AppConstants.greaseRequired,
+    <MachineType>{MachineType.tractor, MachineType.planter},
   ),
 
   // 簡易管理項目
@@ -48,70 +47,42 @@ enum MaintenanceType {
     '始業前点検',
     0,
     0,
-    // MachineType.valuesは実行時に決まるためconst不可
-    // 代わりに全ての値を明示的に列挙
+    // 全ての機械タイプを明示的に列挙
     <MachineType>{
       MachineType.tractor,
+      MachineType.planter,
+      MachineType.combine,
       MachineType.cultivator,
-      MachineType.combiner,
-      MachineType.ricePlanter,
     },
   ),
-  dailyInspection(
-    '日常点検',
-    0,
-    0,
-    <MachineType>{
-      MachineType.tractor,
-      MachineType.cultivator,
-      MachineType.combiner,
-      MachineType.ricePlanter,
-    },
-  ),
-  cleaning(
-    '清掃',
-    0,
-    0,
-    <MachineType>{
-      MachineType.tractor,
-      MachineType.cultivator,
-      MachineType.combiner,
-      MachineType.ricePlanter,
-    },
-  ),
+  dailyInspection('日常点検', 0, 0, <MachineType>{
+    MachineType.tractor,
+    MachineType.planter,
+    MachineType.combine,
+    MachineType.cultivator,
+  }),
+  cleaning('清掃', 0, 0, <MachineType>{
+    MachineType.tractor,
+    MachineType.planter,
+    MachineType.combine,
+    MachineType.cultivator,
+  }),
 
   // JA委託メンテナンス
-  jaAnnualInspection(
-    'JA年次点検',
-    0,
-    0,
-    <MachineType>{
-      MachineType.tractor,
-      MachineType.cultivator,
-      MachineType.combiner,
-      MachineType.ricePlanter,
-    },
-  ),
-  jaRepair(
-    'JA修理',
-    0,
-    0,
-    <MachineType>{MachineType.combiner, MachineType.ricePlanter},
-  ),
+  jaAnnualInspection('JA年次点検', 0, 0, <MachineType>{
+    MachineType.tractor,
+    MachineType.planter,
+    MachineType.combine,
+    MachineType.cultivator,
+  }),
+  jaRepair('JA修理', 0, 0, <MachineType>{
+    MachineType.combine,
+    MachineType.cultivator,
+  }),
 
   // コンバインの特有始業前点検
-  chainOilApplication(
-    'チェーンオイル塗布',
-    0,
-    0,
-    <MachineType>{MachineType.combiner},
-  ),
-  grainTankCleaning(
-    'グレインタンク清掃',
-    0,
-    0,
-    <MachineType>{MachineType.combiner},
-  );
+  chainOilApplication('チェーンオイル塗布', 0, 0, <MachineType>{MachineType.combine}),
+  grainTankCleaning('グレインタンク清掃', 0, 0, <MachineType>{MachineType.combine});
 
   const MaintenanceType(
     this.displayName,
@@ -153,7 +124,6 @@ enum MaintenanceType {
 }
 
 /// メンテナンス記録クラス（詳細管理用）
-/// enum外に移動してクラス構造を修正
 class MaintenanceRecord {
   MaintenanceRecord({
     required this.uuid,
@@ -198,7 +168,7 @@ class MaintenanceRecord {
       machineUuid: json['machineUuid'],
       maintenanceType: MaintenanceType.values.firstWhere(
         (type) => type.name == json['maintenanceType'],
-        orElse: () => MaintenanceType.engineOil, // typo修正: enginOil → engineOil
+        orElse: () => MaintenanceType.engineOil,
       ),
       performedAt: DateTime.parse(json['performedAt']),
       performedHours: json['performedHours'] as int? ?? 0,
