@@ -6,14 +6,14 @@ enum MaintenanceStatus {
 
 class InspectionResult {
   final String itemName;
-  final bool isCheced;
+  final bool isChecked;
   final MaintenanceStatus status;
   final DateTime? inspectionDate;
   final String? note;
 
   InspectionResult({
     required this.itemName,
-    required this.isCheced,
+    required this.isChecked,
     required this.status,
     this.inspectionDate,
     this.note,
