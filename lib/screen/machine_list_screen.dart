@@ -10,4 +10,16 @@ class MachineListScreen extends StatefulWidget {
   State<MachineListScreen> createState() => _MachineListScreenState();
 }
 
-class _MachineListScreenState extends State<MachineListScreen> {}
+class _MachineListScreenState extends State<MachineListScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('機会一覧'),
+      ),
+      body: const Center(
+        child: Text('機会一覧画面の内容をここに追加してください'),
+      ),
+    );
+  }
+}

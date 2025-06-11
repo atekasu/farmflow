@@ -125,6 +125,16 @@ enum MaintenanceType {
 
 /// メンテナンス記録クラス（詳細管理用）
 class MaintenanceRecord {
+  final String uuid;
+  final String machineUuid; // 関連する機械のUUID
+  final MaintenanceType maintenanceType; // メンテナンスの種類
+  final DateTime performedAt; // メンテナンス実施日時
+  final int performedHours; // メンテナンス実施時の稼働時間
+  final String? notes; // メンテナンスに関する備考
+  final double? cost; // メンテナンスにかかった費用
+  final String? performedBy; // メンテナンスを実施した人の名前
+  final DateTime createdAt;
+
   MaintenanceRecord({
     required this.uuid,
     required this.machineUuid,
@@ -178,16 +188,6 @@ class MaintenanceRecord {
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
-
-  final String uuid;
-  final String machineUuid; // 関連する機械のUUID
-  final MaintenanceType maintenanceType; // メンテナンスの種類
-  final DateTime performedAt; // メンテナンス実施日時
-  final int performedHours; // メンテナンス実施時の稼働時間
-  final String? notes; // メンテナンスに関する備考
-  final double? cost; // メンテナンスにかかった費用
-  final String? performedBy; // メンテナンスを実施した人の名前
-  final DateTime createdAt;
 
   /// JSON保存用メソッド
   Map<String, dynamic> toJson() {

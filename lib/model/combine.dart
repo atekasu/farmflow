@@ -2,6 +2,14 @@ import 'package:farmflow/utils/uuid_generator.dart';
 
 /// コンバイン詳細情報クラス（簡易管理）
 class Combiner {
+  final String uuid;
+  final String machineUuid;
+  final int? grainTankCapacity; // グレインタンク容量（L）
+  final int? cuttingWidthCm; // 刈り幅（cm）
+  final DateTime? lastJaInspectionDate; // 最後のJA点検日
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
   const Combiner({
     required this.uuid,
     required this.machineUuid,
@@ -46,14 +54,6 @@ class Combiner {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
-
-  final String uuid;
-  final String machineUuid;
-  final int? grainTankCapacity; // グレインタンク容量（L）
-  final int? cuttingWidthCm; // 刈り幅（cm）
-  final DateTime? lastJaInspectionDate; // 最後のJA点検日
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   /// 次回JA点検の目安（前回から1年後）
   DateTime? get nextJaInspectionDate {

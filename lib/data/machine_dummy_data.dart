@@ -155,7 +155,7 @@ static List<MaintenanceStatusItem> _generateMaintenanceStatus(Machine machine){
       iconColor:const Color(0xFF2196F3),
       subtitle:'推奨交換:200h',
       status:'交換から 80h',
-      statusColor: Colors.gereen,
+      statusColor: Colors.green,
       progressValue:0.4,
       showProgress: true,
     ),
@@ -164,7 +164,7 @@ static List<MaintenanceStatusItem> _generateMaintenanceStatus(Machine machine){
 }
 ///機会とステータスの組み合わせクラス
 class MachineWithStatus{
-  
+
 }
 ///機会とステータスの組み合わせクラス
 class MachineWithStatus {

@@ -2,6 +2,13 @@ import 'package:farmflow/utils/uuid_generator.dart';
 
 /// 肥料詳細情報クラス
 class Fertilizer {
+  final String uuid; // UUID
+  final String statusUuid; // 関連するステータスのUUID
+  final double quantity; // 数量
+  final String unit; // 単位（例: kg, L）
+  final DateTime createdAt; // 作成日時
+  final DateTime updatedAt; // 更新日時
+
   const Fertilizer({
     required this.uuid,
     required this.statusUuid,
@@ -31,23 +38,36 @@ class Fertilizer {
   /// JSON読み込み用ファクトリーコンストラクタ
   factory Fertilizer.fromJson(Map<String, dynamic> json) {
     return Fertilizer(
-      uuid: json['uuid'],
-      statusUuid: json['statusUuid'],
+      uuid: json['uuid'] as String,
+      statusUuid: json['statusUuid'] as String,
       quantity: (json['quantity'] as num).toDouble(),
-      unit: json['unit'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      unit: json['unit'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
-  final String uuid; // UUID
-  final String statusUuid; // 関連するステータスのUUID
-  final double quantity; // 数量
-  final String unit; // 単位（例: kg, L）
-  final DateTime createdAt; // 作成日時
-  final DateTime updatedAt; // 更新日時
+
+  String get displayQuantity => '$quantity';
+
+  bool get isLowStock => quantity < 10;
+
+  String get stockStatus {
+    if (quantity < 0) {
+      return '在庫なし';
+    } else if (quantity < 10) {
+      return '在庫少なめ';
+    } else {
+      return '在庫十分';
+    }
+  }
 
   /// 部分変更用copyWithメソッド
-  Fertilizer copyWith({String? statusUuid, double? quantity, String? unit}) {
+  Fertilizer copyWith({
+    String? statusUuid,
+    double? quantity,
+    String? unit,
+    DateTime? updatedAt,
+  }) {
     return Fertilizer(
       uuid: uuid,
       statusUuid: statusUuid ?? this.statusUuid,

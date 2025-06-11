@@ -1,6 +1,15 @@
 import 'package:farmflow/utils/uuid_generator.dart';
 
 class Tractor {
+  final String uuid; // UUID
+  final String machineUuid; // 関連する機械のUUID
+  final bool? plowAttached; // プラウの取り付け状態
+  final double? hydraulicPressure; // 油圧圧力
+  final double? tirePressureFront; // 前輪のタイヤ圧力
+  final double? tirePressureRear; // 後輪のタイヤ圧力
+  final DateTime createdAt; //作成日時
+  final DateTime updatedAt; // 更新日時
+
   const Tractor({
     required this.uuid,
     required this.machineUuid,
@@ -11,6 +20,7 @@ class Tractor {
     required this.createdAt,
     required this.updatedAt,
   });
+
   // ファクトリーコンストラクタ(新規作成)
   factory Tractor.create({
     required String machineUuid,
@@ -45,14 +55,7 @@ class Tractor {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
-  final String uuid; // UUID
-  final String machineUuid; // 関連する機械のUUID
-  final bool? plowAttached; // プラウの取り付け状態
-  final double? hydraulicPressure; // 油圧圧力
-  final double? tirePressureFront; // 前輪のタイヤ圧力
-  final double? tirePressureRear; // 後輪のタイヤ圧力
-  final DateTime createdAt; //作成日時
-  final DateTime updatedAt; // 更新日時
+
   //部分変更用copyWithメソッド
   Tractor copyWith({
     String? machineUuid,

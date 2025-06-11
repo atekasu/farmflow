@@ -22,6 +22,14 @@ enum MaintenanceLevel {
 
 //農業機械の基本情報クラス
 class Machine {
+  final String uuid;
+  final String statusUuid;
+  final String modelName;
+  final MachineType machineType;
+  final int runningHours;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
   Machine({
     required this.uuid,
     required this.statusUuid,
@@ -67,16 +75,9 @@ class Machine {
     );
   }
 
-  final String uuid;
-  final String statusUuid;
-  final String modelName;
-  final MachineType machineType;
-  final int runningHours;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
   //この機会がどのレベルのメンテナンス管理を必要とするか
   MaintenanceLevel get maintenanceLevel => machineType.maintenanceLevel;
+
   //コピーコンストラクタ
   Machine copyWith({
     String? statusUuid,

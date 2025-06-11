@@ -2,6 +2,16 @@ import 'package:farmflow/utils/uuid_generator.dart';
 
 ///簡易記録のクラス（簡易管理用機会）
 class WorkRecord {
+  final String uuid; // UUID
+  final String machineUuid; // 関連する機械のUUID
+  final DateTime workDate; // 作業日
+  final double workHours; // 作業時間
+  final String workType; // 作業の種類
+  final String? fieldName; // 作業したフィールド名
+  final double? workArea; // 作業面積（ヘクタール）
+  final String? notes; // 作業に関するメモ
+  final DateTime createdAt; // 作成日時
+
   const WorkRecord({
     required this.uuid,
     required this.machineUuid,
@@ -13,6 +23,7 @@ class WorkRecord {
     this.notes,
     required this.createdAt,
   });
+
   //ファクトリーコンストラクタ(新規作成)
   factory WorkRecord.create({
     required String machineUuid,
@@ -50,15 +61,7 @@ class WorkRecord {
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
-  final String uuid; // UUID
-  final String machineUuid; // 関連する機械のUUID
-  final DateTime workDate; // 作業日
-  final double workHours; // 作業時間
-  final String workType; // 作業の種類
-  final String? fieldName; // 作業したフィールド名
-  final double? workArea; // 作業面積（ヘクタール）
-  final String? notes; // 作業に関するメモ
-  final DateTime createdAt; // 作成日時
+
   /// JSON保存用メソッド
   Map<String, dynamic> toJson() {
     return {
