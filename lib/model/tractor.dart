@@ -51,7 +51,7 @@ class Tractor {
   final double? hydraulicPressure; // 油圧圧力
   final double? tirePressureFront; // 前輪のタイヤ圧力
   final double? tirePressureRear; // 後輪のタイヤ圧力
-  final DateTime createdAt; // 作成日時
+  final DateTime createdAt; //作成日時
   final DateTime updatedAt; // 更新日時
   //部分変更用copyWithメソッド
   Tractor copyWith({
