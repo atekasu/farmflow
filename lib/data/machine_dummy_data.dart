@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:farmflow/model/machinetype.dart';
+import 'package:farmflow/model/machine.dart';
 import 'package:farmflow/model/status.dart';
 import 'package:farmflow/model/tractor.dart';
 import 'package:farmflow/utils/uuid_generator.dart';
@@ -128,8 +128,8 @@ static List<MachineWithStatus> getFilteredMachines(Stirng filter){
 
 ///機械の健康状態を計算
 static String _calculateHealthStatus(Machine machine){
-  if(machine.runnningHours < 2000)return '要修理が必要';
-  if(machine.runnningHours < 1900)return'用点検が必要';
+  if(machine.runningHours < 2000)return '要修理が必要';
+  if(machine.runningHours < 1900)return'用点検が必要';
   return '良好';
 }
 
