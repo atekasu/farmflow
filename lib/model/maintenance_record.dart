@@ -1,5 +1,5 @@
 import 'package:farmflow/utils/uuid_generator.dart';
-import 'package:farmflow/model/machinetype.dart';
+import 'package:farmflow/model/machine.dart';
 import 'package:farmflow/utils/constants.dart';
 
 /// メンテナンス種別（メンテナンスの種類を表す）
