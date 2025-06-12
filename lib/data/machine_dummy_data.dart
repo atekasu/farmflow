@@ -138,8 +138,8 @@ class MachineDummyData {
   /// 2000h未満: 要修理が必要  
   /// その他: 良好
   static String _calculateHealthStatus(Machine machine) {
-    if (machine.runningHours < 2000) return '要修理が必要';
     if (machine.runningHours < 1900) return '要点検が必要';
+    if (machine.runningHours < 2000) return '要修理が必要';
     return '良好';
   }
 
