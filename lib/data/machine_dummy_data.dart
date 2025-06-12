@@ -162,7 +162,7 @@ class MachineDummyData {
       MaintenanceStatusItem(
         type: 'エンジンオイル',
         icon: Icons.oil_barrel,
-        iconColor: const Color(0xFF2196F3),
+        iconColor: Colors.blue,
         subtitle: '推奨交換:200h',
         status: '交換から 80h',
         statusColor: Colors.green,
@@ -172,7 +172,7 @@ class MachineDummyData {
       MaintenanceStatusItem(
         type: 'ミッションオイル',
         icon: Icons.oil_barrel,
-        iconColor: const Color(0xFF2196F3),
+        iconColor: Colors.blue,
         subtitle: '推奨交換:200h',
         status: '交換から 80h',
         statusColor: Colors.green,
@@ -182,7 +182,7 @@ class MachineDummyData {
       MaintenanceStatusItem(
         type: '冷却水',
         icon: Icons.water_drop,
-        iconColor: const Color(0xFF03A9F4),
+        iconColor: Colors.lightBlue,
         subtitle: '',
         status: '点検日 2025/04/22',
         statusColor: Colors.grey,
@@ -202,7 +202,7 @@ class MachineDummyData {
       MaintenanceStatusItem(
         type: 'エアフィルター',
         icon: Icons.air,
-        iconColor: const Color(0xFF2196F3),
+        iconColor: Colors.blue,
         subtitle: '',
         status: '点検日 2025/04/22',
         statusColor: Colors.grey,
