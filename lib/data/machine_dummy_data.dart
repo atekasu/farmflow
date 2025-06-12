@@ -65,7 +65,7 @@ class MachineDummyData {
       runningHours: 1400,
     ),
   ];
-  //トラクター詳細のダミーデータ
+  /// トラクター詳細のダミーデータ
   static final List<Tractor> _dummyTractors =
       _dummyMachines.map((machine) {
         return Tractor.create(
@@ -77,7 +77,7 @@ class MachineDummyData {
         );
       }).toList();
 
-  //機会一覧取得(ステータス情報も含む)
+  /// 機械一覧を取得（ステータス情報も含む）
   static List<MachineWithStatus> getMachinesWithStatus() {
     final List<MachineWithStatus> machinesWithStatus = [];
 
@@ -133,7 +133,10 @@ class MachineDummyData {
     return allMachine.where((m) => m.healthStatus == filter).toList();
   }
 
-  ///機械の健康状態を計算
+  /// 機械の健康状態を計算（稼働時間に基づく）
+  /// 1900h未満: 要点検が必要
+  /// 2000h未満: 要修理が必要  
+  /// その他: 良好
   static String _calculateHealthStatus(Machine machine) {
     if (machine.runningHours < 2000) return '要修理が必要';
     if (machine.runningHours < 1900) return '要点検が必要';
@@ -154,7 +157,7 @@ class MachineDummyData {
     }
   }
 
-  //メンテナンス状況のダミーデータ生成
+  /// メンテナンス状況のダミーデータを生成
   static List<MaintenanceStatusItem> _generateMaintenanceStatus(
     Machine machine,
   ) {
@@ -212,6 +215,7 @@ class MachineDummyData {
     ];
   }
 
+  /// 注意事項アイテムを生成（稼働時間に基づく）
   static List<AttentionItem> _generateAttentionItems(Machine machine) {
     if (machine.runningHours < 1900) {
       return [
@@ -227,7 +231,7 @@ class MachineDummyData {
   }
 }
 
-///機会とステータスの組み合わせクラス
+/// 機械とステータスの組み合わせクラス
 class MachineWithStatus {
   final Machine machine;
   final Status status;
@@ -242,6 +246,7 @@ class MachineWithStatus {
   });
 }
 
+/// 機械詳細データクラス（機械、ステータス、トラクター情報を含む）
 class MachineDetailData {
   final Machine machine;
   final Status status;
@@ -258,7 +263,7 @@ class MachineDetailData {
   });
 }
 
-///メンテナンス状況項目クラス
+/// メンテナンス状況項目クラス
 class MaintenanceStatusItem {
   final String type; // メンテナンスの種類
   final IconData icon; // アイコン
@@ -281,7 +286,7 @@ class MaintenanceStatusItem {
   });
 }
 
-///注意事項項目クラス
+/// 注意事項項目クラス
 class AttentionItem {
   final String title; // 注意事項のタイトル
   final String description; // 注意事項の説明
@@ -296,4 +301,3 @@ class AttentionItem {
   });
 }
 
-///機会とステータスの組み合わせクラス
