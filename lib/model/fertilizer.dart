@@ -78,6 +78,29 @@ class Fertilizer {
     );
   }
 
+  ///使用料を減産した新しいインスタンスを作成
+  ///
+  ///Retruns: 使用料を差し引いた新しいFertilizerインスタンス
+  ///
+  ///Throws: 使用量が現在の数量を超える場合はArgumentError
+  Fertilizer use(double usedQuantity) {
+    if (usedQuantity > quantity) {
+      throw ArgumentError('使用量($usedQuantity)が現在の数量($displayQuantity)を超えています。');
+    }
+    return copyWith(quantity: quantity - usedQuantity);
+  }
+
+  ///補充料を加算した新しいインスタンスを作成
+  ///
+  ///[addQuantity]　補充する数量
+  ///Returns: 補充後の新しいFertilizerインスタンス
+  Fertilizer replenish(double addQuantity) {
+    if (addQuantity <= 0) {
+      throw ArgumentError('補充量は正の数でなければなりません。');
+    }
+    return copyWith(quantity: quantity + addQuantity);
+  }
+
   /// JSON保存用メソッド
   Map<String, dynamic> toJson() {
     return {
