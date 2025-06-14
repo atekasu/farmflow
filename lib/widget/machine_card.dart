@@ -1,8 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
-class MachineCard {
+class MachineCard extends StatelessWidget {
   final String machineNo; //機械ナンバー
   final String modelName; //機械モデル名
   final int runningHours; // 稼働時間
@@ -11,6 +9,7 @@ class MachineCard {
   final VoidCallback? onTap; // タップ時のコールバック
 
   const MachineCard({
+    super.key,
     required this.machineNo,
     required this.modelName,
     required this.runningHours,
@@ -18,31 +17,33 @@ class MachineCard {
     required this.statusColor,
     this.onTap,
   });
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      // カードの立体感（影の深さ）を設定
+      // カードに影を付ける
       elevation: 2,
 
-      //カードの角を丸くする
+      // 角丸にする
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 
-      //カードの背景色を白に設定
+      // 背景色を白に設定
       color: Colors.white,
 
       child: InkWell(
-        // タップされた時の処理を設定
+        // タップイベント
         onTap: onTap,
-        //リップルエフェクトの革マルをカードと合わせる
+        // リップルとカードの角丸を揃える
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16), //カードの内側の余白を設定
+          // 内側余白
+          padding: const EdgeInsets.all(16),
           child: Column(
-            //左寄せに設定（デフォルトは中央よせ）
+            // 左寄せ
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                //左右に要素を配置（左：機械番号、右：ステータス）
+                // 機械番号とステータスを左右配置
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
@@ -57,7 +58,6 @@ class MachineCard {
                         ),
                       ),
 
-                      // 機械モデル名を表示
                       Text(
                         modelName,
                         style: const TextStyle(
@@ -69,19 +69,19 @@ class MachineCard {
                     ],
                   ),
                   Container(
-                    //内側の余白設定
+                    // バッジ内余白
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,
                     ),
 
-                    //ステータスバッジのデザイン
+                    // ステータスバッジ
                     decoration: BoxDecoration(
                       color: statusColor, // ステータスに応じた色
-                      borderRadius: BorderRadius.circular(12), // 角を丸くする
+                      borderRadius: BorderRadius.circular(12), // 角丸
                     ),
 
-                    //ステータスのテキスト
+                    // ステータス表示
                     child: Text(
                       status,
                       style: const TextStyle(
@@ -93,24 +93,24 @@ class MachineCard {
                   ),
                 ],
               ),
-              //=====中間：上部と下部の間に16pxの余白
+              // 上下間隔
               const SizedBox(height: 16),
-              //=====下部：走行時間を表示する青いボックス
+              // 稼働時間表示ボックス
               Container(
-                //横幅を親要素いっぱいにする
+                // 横幅最大
                 width: double.infinity,
-                //内側の余白を設定
+                // 内側余白
                 padding: const EdgeInsets.all(12),
-                //ボックスデザイン
+                // 背景色と角丸
                 decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                //ボックス内の内容を縦に配置
+                // 縦レイアウト
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //ラベル「走行時間」
+                    // ラベル
                     const Text(
                       '走行時間',
                       style: TextStyle(
@@ -119,9 +119,9 @@ class MachineCard {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    //ラベルと数字の間に4pxの余白
+                    // 間隔
                     const SizedBox(height: 4),
-                    //実際の走行時間
+                    // 時間表示
                     Text(
                       '${runningHours}h',
                       style: const TextStyle(
