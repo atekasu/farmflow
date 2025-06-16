@@ -80,10 +80,45 @@ class MaintenaceItemCard extends StatelessWidget {
 
                       //プログレスバーまたはステータス表示
                       if (showProgress)
-                        Column(crossAxisAlignment: CrossAxisAlignment.start),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LinearProgressIndicator(
+                              value: progressValue,
+                              backgroundColor: Colors.grey[200],
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                progressValue < 0.7
+                                    ? Colors.green
+                                    : progressValue < 0.9
+                                    ? Colors.orange
+                                    : Colors.red,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              status,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: statusColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        Text(
+                          status,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: statusColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                     ],
                   ),
                 ),
+
+                //ステータスバッジ
               ],
             ),
           ),
