@@ -119,11 +119,38 @@ class MaintenaceItemCard extends StatelessWidget {
                 ),
 
                 //ステータスバッジ
+                if (showProgress)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      _getStatusText(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  String _getStatusText() {
+    if (!showProgress) return '';
+
+    if (progressValue < 0.7) return '良好';
+    if (progressValue < 0.9) return '要注意';
+    return '交換';
   }
 }
