@@ -96,7 +96,7 @@ Three-tier maintenance system:
 
 The project uses `package:flutter_lints/flutter.yaml` for code analysis. Key standards:
 - Follow Flutter/Dart conventions
-- Use descriptive variable names in Japanese where domain-specific
+- Use descriptive variable names in日本語 where domain-specific
 - Maintain consistent formatting with `dart format`
 - Run `flutter analyze` before committing changes
 
@@ -105,3 +105,23 @@ The project uses `package:flutter_lints/flutter.yaml` for code analysis. Key sta
 - Test files located in `test/` directory
 - Run tests with `flutter test`
 - Widget tests are the primary testing approach for Flutter UI components
+
+---
+
+## Claude Codeへの追加前提（Claudeへのプロンプトとして活用）
+
+このプロジェクトは、IT未経験からの転職を目的として構築しており、以下の指針に沿ってClaude Codeの支援を期待します：
+
+- **プロジェクト名**: 農機具管理アプリ（Flutter→Django）
+- **目的**: 転職用ポートフォリオの構築、SQLとバックエンド学習、副業案件獲得
+- **開発方針**:
+  - MVP思考でまず動くものを優先
+  - 完璧主義による実行停止を防ぐため、段階的に実装を進める
+  - 不安軽減のため、複数案を提示してから決定したい
+- **設計哲学**:
+  - composition-first（has-a 関係重視、継承より構成）
+  - フォルダ構造：data / models / providers / screen / widgets
+  - UUIDは v4形式を採用（`uuid`パッケージ）
+- **開発支援方針**:
+  - Claudeは曖昧な仕様があれば補完・提案してよい
+  - 初学者向けの視点で理由付きの提案を優先

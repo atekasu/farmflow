@@ -117,8 +117,9 @@ class MaintenaceItemCard extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                //ステータスバッジ
+                //=============
+                //右側：ステータスバッジ
+                //=============
                 if (showProgress)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -126,11 +127,11 @@ class MaintenaceItemCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: statusColor,
-                      borderRadius: BorderRadius.circular(12),
+                      color: statusColor, //ステータスに応じた色
+                      borderRadius: BorderRadius.circular(12), //角丸
                     ),
                     child: Text(
-                      _getStatusText(),
+                      _getStatusText(), //ステータステキストを取得
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10,
