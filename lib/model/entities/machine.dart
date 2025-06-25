@@ -1,26 +1,8 @@
 import 'package:farmflow/utils/uuid_generator.dart';
+import 'package:farmflow/model/enums/machine_type.dart';
+import 'package:farmflow/model/enums/maintenance_level.dart';
 
-//機会タイプ別の管理レベル
-enum MachineType {
-  tractor('トラクター', MaintenanceLevel.detailed),
-  combine('コンバイン', MaintenanceLevel.simple),
-  planter('田植え機', MaintenanceLevel.simple),
-  cultivator('管理機', MaintenanceLevel.simple),
-  attachment('アタッチメント', MaintenanceLevel.minimal);
-
-  const MachineType(this.displayName, this.maintenanceLevel);
-  final String displayName;
-  final MaintenanceLevel maintenanceLevel;
-}
-
-///メンテナンス管理
-enum MaintenanceLevel {
-  detailed, // 詳細なメンテナンス
-  simple, // 簡易なメンテナンス
-  minimal, // 最小限のメンテナンス
-}
-
-//農業機械の基本情報クラス
+/// 農業機械の基本情報クラス
 class Machine {
   final String uuid;
   final String statusUuid;
@@ -40,7 +22,7 @@ class Machine {
     required this.updatedAt,
   });
 
-  //ファクトリーコンストラクタ(新規作成)
+  /// ファクトリーコンストラクタ(新規作成)
   factory Machine.create({
     required String statusUuid,
     required String modelName,
@@ -75,10 +57,10 @@ class Machine {
     );
   }
 
-  //この機会がどのレベルのメンテナンス管理を必要とするか
+  /// この機械がどのレベルのメンテナンス管理を必要とするか
   MaintenanceLevel get maintenanceLevel => machineType.maintenanceLevel;
 
-  //コピーコンストラクタ
+  /// コピーコンストラクタ
   Machine copyWith({
     String? statusUuid,
     String? modelName,
