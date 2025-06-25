@@ -1,8 +1,2 @@
-import 'package:farmflow/'
-///フィルタリングされた機械一覧を取得
-  class List<MachineWithStatus> getFilteredMachines(String filter) {
-    final allMachine = getMachinesWithStatus();
-
-    if (filter == '全て') return allMachine;
-    return allMachine.where((m) => m.healthStatus == filter).toList();
-  }
+// このファイルは廃止されました
+// 代わりにlib/data/services/machine_filter_service.dartを使用してください
