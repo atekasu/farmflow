@@ -3,7 +3,7 @@ class MaintenanceConstants {
   const MaintenanceConstants._(); //インスタンスかを防ぐ
   //エンジンオイル
   static const int enginOilWarningHours = 150;
-  static const int enginOilMaintenaceHours = 200;
+  static const int enginOilMaintenanceHours = 200;
 
   //オイルフィルター
   static const int oilFilterWarningHours = 180;
@@ -23,8 +23,8 @@ class MaintenanceConstants {
 }
 
 ///メンテナンス項目の定義
-class MaintenaceConfig {
-  const MaintenaceConfig({
+class MaintenanceConfig {
+  const MaintenanceConfig({
     required this.name,
     required this.warningHours,
     required this.maintenanceHours,
@@ -42,28 +42,28 @@ class MaintenaceConfig {
   }
 
   //標準的なメンテナンス項目の設定
-  static const Map<String, MaintenaceConfig> standardItems = {
-    'engineOil': MaintenaceConfig(
+  static const Map<String, MaintenanceConfig> standardItems = {
+    'engineOil': MaintenanceConfig(
       name: 'エンジンオイル',
       warningHours: MaintenanceConstants.enginOilWarningHours,
-      maintenanceHours: MaintenanceConstants.enginOilMaintenaceHours,
+      maintenanceHours: MaintenanceConstants.enginOilMaintenanceHours,
     ),
-    'oilFilter': MaintenaceConfig(
+    'oilFilter': MaintenanceConfig(
       name: 'オイルフィルター',
       warningHours: MaintenanceConstants.oilFilterWarningHours,
       maintenanceHours: MaintenanceConstants.oilFilterMaintenanceHours,
     ),
-    'missionOil': MaintenaceConfig(
+    'missionOil': MaintenanceConfig(
       name: 'ミッションオイル',
       warningHours: MaintenanceConstants.missionOilWarningHours,
       maintenanceHours: MaintenanceConstants.missionOilMaintenanceHours,
     ),
-    'airFilter': MaintenaceConfig(
+    'airFilter': MaintenanceConfig(
       name: 'エアフィルター',
       warningHours: MaintenanceConstants.airFilterWarningHours,
       maintenanceHours: MaintenanceConstants.airFilterMaintenanceHours,
     ),
-    'grease': MaintenaceConfig(
+    'grease': MaintenanceConfig(
       name: 'グリース給脂',
       warningHours: MaintenanceConstants.greaseWarningHours,
       maintenanceHours: MaintenanceConstants.greaseMaintenanceHours,

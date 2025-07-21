@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:farmflow/model/machine/maintenace_constants.dart';
+import 'package:farmflow/model/machine/maintenance_constants.dart';
 import 'package:farmflow/model/machine/machine_status.dart';
 import 'package:farmflow/model/machine/maintenace_item.dart';
 
@@ -29,16 +29,16 @@ class Machine {
       number: number,
       modelName: modelName,
       runningHours: runningHours,
-      maintenanceItems: _createStandardMaintenaceItems(runningHours),
+      maintenanceItems: _createStandardMaintenanceItems(runningHours),
     );
   }
   //標準的なメンテナンス項目を作成する
-  static Map<String, MaintenanceItem> _createStandardMaintenaceItems(
+  static Map<String, MaintenanceItem> _createStandardMaintenanceItems(
     int runningHours,
   ) {
     final items = <String, MaintenanceItem>{};
 
-    for (final entry in MaintenaceConfig.standardItems.entries) {
+    for (final entry in MaintenanceConfig.standardItems.entries) {
       items[entry.key] = MaintenanceItem.fromConfig(entry.value.toJson());
     }
 
