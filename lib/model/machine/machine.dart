@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:farmflow/model/machine/maintenace_constants.dart';
 import 'package:farmflow/model/machine/machine_status.dart';

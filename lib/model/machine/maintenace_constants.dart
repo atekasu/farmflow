@@ -1,5 +1,3 @@
-import 'package:farmflow/model/machine/maintenace_item.dart';
-
 ///メンテナンス間隔の定数
 class MaintenanceConstants {
   const MaintenanceConstants._(); //インスタンスかを防ぐ
