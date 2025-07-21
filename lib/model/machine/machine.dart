@@ -1,91 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-
-enum MachineStatus {
-  normal, //正常
-  warning, //警告
-  maintenace; // メンテナスが必要
-
-  String get lable {
-    switch (this) {
-      case MachineStatus.normal:
-        return '正常';
-      case MachineStatus.warning:
-        return '警告';
-      case MachineStatus.maintenace:
-        return 'メンテナンスが必要';
-    }
-  }
-}
-
-//各メンテナンス項目のステータス
-enum MachineMaintenanceStatus {
-  norml, //正常
-  warning, //警告
-  maintenace; //メンテナンスが必要
-
-  String get label {
-    switch (this) {
-      case MachineMaintenanceStatus.norml:
-        return '正常';
-      case MachineMaintenanceStatus.warning:
-        return '警告';
-      case MachineMaintenanceStatus.maintenace:
-        return 'メンテナンスが必要';
-    }
-  }
-}
-
-//  各メンテナス項目のステータス
-enum MaintenanceItemStatus {
-  normal, //正常
-  warning, //警告
-  maintenace; //メンテナンスが必要
-
-  String get label {
-    switch (this) {
-      case MaintenanceItemStatus.normal:
-        return '正常';
-      case MaintenanceItemStatus.warning:
-        return '警告';
-      case MaintenanceItemStatus.maintenace:
-        return 'メンテナンスが必要';
-    }
-  }
-}
-
-class MaintenanceItem {
-  final String name; //メンテナンス項目名
-  final int lastChangedHours; //前回のメンテナンス時の稼働時間
-  final int warningHours; //警告を出す稼働時間
-  final int maintenanceHours; //交換までの時間
-
-  const MaintenanceItem({
-    required this.name,
-    required this.lastChangedHours,
-    required this.warningHours,
-    required this.maintenanceHours,
-  });
-
-  //ステータス計算
-  MaintenanceItemStatus getStatus(int currentHours) {
-    final hoursSinceChange = currentHours - lastChangedHours;
-
-    if (hoursSinceChange >= maintenanceHours) {
-      return MaintenanceItemStatus.maintenace;
-    } else if (hoursSinceChange >= warningHours) {
-      return MaintenanceItemStatus.warning;
-    }
-    return MaintenanceItemStatus.normal;
-  }
-
-  //次回交換まで後何時間かを計算する
-  int getHoursUntiMaintenace(int currentHours) {
-    final nextMaintenaceHours = lastChangedHours + maintenanceHours;
-    final remaining = nextMaintenaceHours - currentHours;
-    return remaining > 0 ? remaining.toInt() : 0; //負の値にならないようにする
-  }
-}
+import 'package:farmflow/model/machine/maintenace_constants.dart';
+import 'package:farmflow/model/machine/machine_status.dart';
+import 'package:farmflow/model/machine/maintenace_item.dart';
 
 class Machine {
   final String id;
@@ -113,39 +30,20 @@ class Machine {
       number: number,
       modelName: modelName,
       runningHours: runningHours,
-      maintenanceItems: {
-        'engineOil': MaintenanceItem(
-          name: 'エンジンオイル',
-          lastChangedHours: runningHours,
-          warningHours: 150,
-          maintenanceHours: 200,
-        ),
-        'oilFilter': MaintenanceItem(
-          name: 'オイルフィルター',
-          lastChangedHours: runningHours,
-          warningHours: 180,
-          maintenanceHours: 200,
-        ),
-        'missionOil': MaintenanceItem(
-          name: 'ミッションオイル',
-          lastChangedHours: runningHours,
-          warningHours: 350,
-          maintenanceHours: 400,
-        ),
-        'airFilter': MaintenanceItem(
-          name: 'エアフィルター',
-          lastChangedHours: runningHours,
-          warningHours: 180,
-          maintenanceHours: 200,
-        ),
-        'grease': MaintenanceItem(
-          name: 'グリース',
-          lastChangedHours: runningHours,
-          warningHours: 45,
-          maintenanceHours: 50,
-        ),
-      },
+      maintenanceItems: _createStandardMaintenaceItems(runningHours),
     );
+  }
+  //標準的なメンテナンス項目を作成する
+  static Map<String, MaintenanceItem> _createStandardMaintenaceItems(
+    int runningHours,
+  ) {
+    final items = <String, MaintenanceItem>{};
+
+    for (final entry in MaintenaceConfig.standardItems.entries) {
+      items[entry.key] = MaintenanceItem.fromConfig(entry.value.toJson());
+    }
+
+    return items;
   }
 
   //全体のステータス判定
