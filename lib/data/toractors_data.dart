@@ -1,6 +1,6 @@
 import 'package:farmflow/model/machine/machine.dart';
-import 'package:farmflow/model/mantenance.dart';
-import 'package:farmflow/model/machine/maintenace_item.dart';
+import 'package:farmflow/model/maintenance.dart';
+import 'package:farmflow/model/machine/maintenance_item.dart';
 
 final dummyMachines = [
   Machine(

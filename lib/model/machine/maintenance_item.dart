@@ -29,27 +29,31 @@ class MaintenanceItem {
     required this.maintenanceHours,
   });
 
-  factory MaintenanceItem.fromConfig(Map<String, dynamic> json) {
-    //エラーハンドリングを追加
-    try {
-      final maintenanceItemsData =
-          json['maintenanceItems'] as Map<String, dynamic>? ?? {};
-      final maintenanceItems = <String, MaintenanceItem>{};
-
-      maintenanceItemsData.forEach((key, value) {
-        maintenanceItems[key] = MaintenanceItem.fromConfig(value);
-      });
-
-      return MaintenanceItem(
-        name: json['name'] as String,
-        lastChangedHours: json['lastChangedHours'] as int,
-        warningHours: json['warningHours'] as int,
-        maintenanceHours: json['maintenanceHours'] as int,
-      );
-    } catch (e) {
-      throw Exception('MaintenanceItemのデータ変換に失敗しました: $e');
-    }
+  // JSONからのデータ作成用
+  factory MaintenanceItem.fromJson(Map<String, dynamic> json) {
+    return MaintenanceItem(
+      name: json['name'] as String,
+      lastChangedHours: json['lastChangedHours'] as int? ?? 0,
+      warningHours: json['warningHours'] as int? ?? 0,
+      maintenanceHours: json['maintenanceHours'] as int? ?? 0,
+    );
   }
+
+  // 追加: MaintenanceConfigから作成するファクトリーコンストラクタ
+  factory MaintenanceItem.fromConfig({
+    required String name,
+    required int warningHours,
+    required int maintenanceHours,
+    int initialHours = 0,
+  }) {
+    return MaintenanceItem(
+      name: name,
+      lastChangedHours: initialHours,
+      warningHours: warningHours,
+      maintenanceHours: maintenanceHours,
+    );
+  }
+
   //ステータス計算
   MaintenanceItemStatus getStatus(int currentHours) {
     final hoursSinceChange = currentHours - lastChangedHours;
@@ -67,5 +71,25 @@ class MaintenanceItem {
     final nextMaintenaceHours = lastChangedHours + maintenanceHours;
     final remaining = nextMaintenaceHours - currentHours;
     return remaining > 0 ? remaining.toInt() : 0; //負の値にならないようにする
+  }
+
+  //メンテナンス実施後の新しいアイテムを作成
+  MaintenanceItem performMaintenance(int currentHours) {
+    return MaintenanceItem(
+      name: name,
+      lastChangedHours: currentHours,
+      warningHours: warningHours,
+      maintenanceHours: maintenanceHours,
+    );
+  }
+
+  //JSON変換
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'lastChangedHours': lastChangedHours,
+      'warningHours': warningHours,
+      'maintenanceHours': maintenanceHours,
+    };
   }
 }

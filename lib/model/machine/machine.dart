@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'package:farmflow/model/machine/maintenance_constants.dart';
 import 'package:farmflow/model/machine/machine_status.dart';
-import 'package:farmflow/model/machine/maintenace_item.dart';
+import 'package:farmflow/model/machine/maintenance_item.dart';
 
 class Machine {
   final String id;
@@ -39,7 +39,7 @@ class Machine {
     final items = <String, MaintenanceItem>{};
 
     for (final entry in MaintenanceConfig.standardItems.entries) {
-      items[entry.key] = MaintenanceItem.fromConfig(entry.value.toJson());
+      items[entry.key] = entry.value.createItem(initialHours: 0);
     }
 
     return items;
@@ -48,18 +48,18 @@ class Machine {
   //全体のステータス判定
   MachineStatus get overallStatus {
     bool hasWarning = false;
-    bool hasMaintenace = false;
+    bool hasMaintenance = false;
 
     for (final item in maintenanceItems.values) {
       final status = item.getStatus(runningHours);
-      if (status == MaintenanceItemStatus.maintenace) {
-        hasMaintenace = true;
+      if (status == MaintenanceItemStatus.maintenance) {
+        hasMaintenance = true;
       } else if (status == MaintenanceItemStatus.warning) {
         hasWarning = true;
       }
     }
-    if (hasMaintenace) {
-      return MachineStatus.maintenace;
+    if (hasMaintenance) {
+      return MachineStatus.maintenance;
     } else if (hasWarning) {
       return MachineStatus.warning;
     }
@@ -91,7 +91,7 @@ class Machine {
         .where(
           (entry) =>
               entry.value.getStatus(runningHours) ==
-              MaintenanceItemStatus.maintenace,
+              MaintenanceItemStatus.maintenance,
         )
         .map((entry) => entry.value)
         .toList();
@@ -117,12 +117,12 @@ class Machine {
 
   //Firebaseからのデータ作成用
   factory Machine.fromJson(Map<String, dynamic> json) {
-    final maintenaceItemsData =
+    final maintenanceItemsData =
         json['maintenanceItems'] as Map<String, dynamic>;
-    final maintenaceItems = <String, MaintenanceItem>{};
+    final maintenanceItems = <String, MaintenanceItem>{};
 
-    maintenaceItemsData.forEach((key, value) {
-      maintenaceItems[key] = MaintenanceItem(
+    maintenanceItemsData.forEach((key, value) {
+      maintenanceItems[key] = MaintenanceItem(
         name: value['name'] as String,
         lastChangedHours: value['lastChangedHours'] as int,
         warningHours: value['warningHours'] as int,
@@ -135,7 +135,7 @@ class Machine {
       number: json['number'] as String,
       modelName: json['modelName'] as String,
       runningHours: json['runningHours'] as int,
-      maintenanceItems: maintenaceItems,
+      maintenanceItems: maintenanceItems,
     );
   }
 
