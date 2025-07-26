@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:farmflow/model/machine/machine_status.dart';
 import 'package:farmflow/model/machine/machine.dart';
 import 'package:farmflow/widget/status_indicator.dart';
 
