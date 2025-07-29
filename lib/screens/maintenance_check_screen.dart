@@ -1,3 +1,5 @@
+import 'package:farmflow/model/machine/maintenance_constants.dart';
+import 'package:farmflow/model/machine/maintenance_item.dart';
 import 'package:flutter/material.dart';
 import 'package:farmflow/model/machine/machine.dart';
 
@@ -8,19 +10,6 @@ enum InspectionStatus {
   bad,
 }
 
-class InspectionItem {
-  final String name;
-  final String description;
-  final IconData icon;
-  InspectionStatus status;
-
-  InspectionItem({
-    required this.name,
-    required this.description,
-    required this.icon,
-    this.status = InspectionStatus.notChecked,
-  });
-}
 
 class MaintenanceCheckScreen extends StatefulWidget {
   final Machine machine;
@@ -37,13 +26,17 @@ class MaintenanceCheckScreen extends StatefulWidget {
 class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
   late PageController _pageController;
   int _currentIndex = 0;
-  late List<InspectionItem> _inspectionItems;
+  late List<MaintenanceItem> _inspectionItems;
+  late Map<String, InspectionStatus> _inspectionStatuses;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    _inspectionItems = _getInspectionItems();
+    _inspectionItems = widget.machine.maintenanceItems.values.toList();
+    _inspectionStatuses = {
+      for (var item in _inspectionItems) item.name: InspectionStatus.notChecked
+    };
   }
 
   @override
@@ -52,60 +45,7 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
     super.dispose();
   }
 
-  List<InspectionItem> _getInspectionItems() {
-    return [
-      InspectionItem(
-        name: 'エンジンオイル',
-        description: 'オイル量とオイルの汚れ具合を確認してください',
-        icon: Icons.oil_barrel,
-      ),
-      InspectionItem(
-        name: 'ミッションオイル',
-        description: 'トランスミッションオイル量を確認してください',
-        icon: Icons.settings,
-      ),
-      InspectionItem(
-        name: '冷却水',
-        description: 'クーラント量とラジエーター周りを確認してください',
-        icon: Icons.water_drop,
-      ),
-      InspectionItem(
-        name: 'グリース',
-        description: 'グリースニップルの状態を確認してください',
-        icon: Icons.agriculture,
-      ),
-      InspectionItem(
-        name: 'エアフィルター',
-        description: 'フィルターの汚れや破損がないか確認してください',
-        icon: Icons.air,
-      ),
-      InspectionItem(
-        name: 'ファンベルト',
-        description: 'ベルトの張り具合とひび割れを確認してください',
-        icon: Icons.linear_scale,
-      ),
-      InspectionItem(
-        name: 'タイヤ',
-        description: 'タイヤの摩耗とタイヤ圧を確認してください',
-        icon: Icons.circle,
-      ),
-      InspectionItem(
-        name: '燃料フィルター',
-        description: 'フィルターの詰まりがないか確認してください',
-        icon: Icons.filter_alt,
-      ),
-      InspectionItem(
-        name: 'ブレーキワイヤー',
-        description: 'ワイヤーの張り具合と損傷を確認してください',
-        icon: Icons.cable,
-      ),
-      InspectionItem(
-        name: 'ラジエーターホース',
-        description: 'ホースの亀裂や漏れがないか確認してください',
-        icon: Icons.plumbing,
-      ),
-    ];
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +110,15 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: _inspectionItems.asMap().entries.map((entry) {
               int index = entry.key;
-              InspectionItem item = entry.value;
-              
+              MaintenanceItem item = entry.value;
+              final status = _inspectionStatuses[item.name]!;
+
               Color dotColor;
-              if (item.status == InspectionStatus.good) {
+              if (status == InspectionStatus.good) {
                 dotColor = Colors.green;
-              } else if (item.status == InspectionStatus.warning) {
+              } else if (status == InspectionStatus.warning) {
                 dotColor = Colors.orange;
-              } else if (item.status == InspectionStatus.bad) {
+              } else if (status == InspectionStatus.bad) {
                 dotColor = Colors.red;
               } else if (index == _currentIndex) {
                 dotColor = const Color(0xFF4CAF50);
@@ -202,7 +143,8 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
     );
   }
 
-  Widget _buildInspectionCard(InspectionItem item) {
+  Widget _buildInspectionCard(MaintenanceItem item) {
+    final info = maintenanceInfoMap[item.name]!;
     return Container(
       margin: const EdgeInsets.all(16),
       child: Card(
@@ -222,7 +164,7 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  item.icon,
+                  info.icon,
                   size: 48,
                   color: const Color(0xFF4CAF50),
                 ),
@@ -238,7 +180,7 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                item.description,
+                info.description,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Colors.grey[700],
                   height: 1.5,
@@ -254,7 +196,8 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
     );
   }
 
-  Widget _buildStatusButtons(InspectionItem item) {
+  Widget _buildStatusButtons(MaintenanceItem item) {
+    final status = _inspectionStatuses[item.name]!;
     return Column(
       children: [
         SizedBox(
@@ -263,20 +206,20 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
           child: ElevatedButton(
             onPressed: () => _setStatus(item, InspectionStatus.good),
             style: ElevatedButton.styleFrom(
-              backgroundColor: item.status == InspectionStatus.good
+              backgroundColor: status == InspectionStatus.good
                   ? Colors.green
                   : Colors.green.withOpacity(0.1),
-              foregroundColor: item.status == InspectionStatus.good
+              foregroundColor: status == InspectionStatus.good
                   ? Colors.white
                   : Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   color: Colors.green,
-                  width: item.status == InspectionStatus.good ? 0 : 2,
+                  width: status == InspectionStatus.good ? 0 : 2,
                 ),
               ),
-              elevation: item.status == InspectionStatus.good ? 4 : 0,
+              elevation: status == InspectionStatus.good ? 4 : 0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -300,20 +243,20 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
           child: ElevatedButton(
             onPressed: () => _setStatus(item, InspectionStatus.warning),
             style: ElevatedButton.styleFrom(
-              backgroundColor: item.status == InspectionStatus.warning
+              backgroundColor: status == InspectionStatus.warning
                   ? Colors.orange
                   : Colors.orange.withOpacity(0.1),
-              foregroundColor: item.status == InspectionStatus.warning
+              foregroundColor: status == InspectionStatus.warning
                   ? Colors.white
                   : Colors.orange,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   color: Colors.orange,
-                  width: item.status == InspectionStatus.warning ? 0 : 2,
+                  width: status == InspectionStatus.warning ? 0 : 2,
                 ),
               ),
-              elevation: item.status == InspectionStatus.warning ? 4 : 0,
+              elevation: status == InspectionStatus.warning ? 4 : 0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -337,20 +280,20 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
           child: ElevatedButton(
             onPressed: () => _setStatus(item, InspectionStatus.bad),
             style: ElevatedButton.styleFrom(
-              backgroundColor: item.status == InspectionStatus.bad
+              backgroundColor: status == InspectionStatus.bad
                   ? Colors.red
                   : Colors.red.withOpacity(0.1),
-              foregroundColor: item.status == InspectionStatus.bad
+              foregroundColor: status == InspectionStatus.bad
                   ? Colors.white
                   : Colors.red,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
                   color: Colors.red,
-                  width: item.status == InspectionStatus.bad ? 0 : 2,
+                  width: status == InspectionStatus.bad ? 0 : 2,
                 ),
               ),
-              elevation: item.status == InspectionStatus.bad ? 4 : 0,
+              elevation: status == InspectionStatus.bad ? 4 : 0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -455,11 +398,11 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
     );
   }
 
-  void _setStatus(InspectionItem item, InspectionStatus status) {
+  void _setStatus(MaintenanceItem item, InspectionStatus status) {
     setState(() {
-      item.status = status;
+      _inspectionStatuses[item.name] = status;
     });
-    
+
     Future.delayed(const Duration(milliseconds: 500), () {
       if (_currentIndex < _inspectionItems.length - 1) {
         _nextPage();
@@ -487,7 +430,7 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
 
   void _completeInspection() {
     final incompleteItems = _inspectionItems
-        .where((item) => item.status == InspectionStatus.notChecked)
+        .where((item) => _inspectionStatuses[item.name] == InspectionStatus.notChecked)
         .toList();
 
     if (incompleteItems.isNotEmpty) {
@@ -523,9 +466,9 @@ class _MaintenanceCheckScreenState extends State<MaintenanceCheckScreen> {
   }
 
   void _finishInspection() {
-    final goodCount = _inspectionItems.where((item) => item.status == InspectionStatus.good).length;
-    final warningCount = _inspectionItems.where((item) => item.status == InspectionStatus.warning).length;
-    final badCount = _inspectionItems.where((item) => item.status == InspectionStatus.bad).length;
+    final goodCount = _inspectionStatuses.values.where((status) => status == InspectionStatus.good).length;
+    final warningCount = _inspectionStatuses.values.where((status) => status == InspectionStatus.warning).length;
+    final badCount = _inspectionStatuses.values.where((status) => status == InspectionStatus.bad).length;
 
     showDialog(
       context: context,

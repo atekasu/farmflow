@@ -39,7 +39,7 @@ class Machine {
     final items = <String, MaintenanceItem>{};
 
     for (final entry in MaintenanceConfig.standardItems.entries) {
-      items[entry.key] = entry.value.createItem(initialHours: 0);
+      items[entry.key] = entry.value.createItem(name: entry.key, initialHours: 0);
     }
 
     return items;
